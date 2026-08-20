@@ -1,5 +1,6 @@
 import { cn } from "@/lib/cn";
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -41,11 +42,18 @@ export function Button({
   );
 
   if (href) {
-    const external = href.startsWith("http");
+    const external = href.startsWith("http") || href.startsWith("mailto:") || href.startsWith("tel:");
+    if (external) {
+      return (
+        <a href={href} className={cls} target="_blank" rel="noopener noreferrer">
+          {inner}
+        </a>
+      );
+    }
     return (
-      <a href={href} className={cls} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+      <Link href={href} className={cls}>
         {inner}
-      </a>
+      </Link>
     );
   }
 
