@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-forest: #0b383e;
+  --color-forest-deep: #0e3b3f;
+  --color-forest-mid: #184444;
+  --color-teal: #2b6e6b;
+  --color-lime: #8cc63f;
+  --color-sage: #e3e7d3;
+  --color-mist: #f3f5f4;
+  --color-mist-2: #e9efee;
+  --color-ink: #0b383e;
+  --color-muted: #5c6a68;
+  --color-line: #d6dcda;
+  --color-whatsapp: #25d366;
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-playfair);
+  --shadow-media: 0 28px 50px -20px rgb(11 56 62 / 0.28);
+  --shadow-soft: 0 10px 30px rgb(11 56 62 / 0.08);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #ffffff;
+  color: var(--color-ink);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-lime) 40%, white);
+  color: var(--color-forest);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-lime);
+  outline-offset: 3px;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee 48s linear infinite;
+}
+
+.underline-swoosh {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 14' fill='none'%3E%3Cpath d='M3 10c52-8 96 3 148-3 34-4 64 3 86 5' stroke='%238CC63F' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 92%;
+  background-size: 100% 12px;
+  padding-bottom: 0.12em;
+}
+
+.img-zoom {
+  overflow: hidden;
+}
+
+.img-zoom img,
+.img-zoom-target {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.img-zoom:hover img,
+.img-zoom:hover .img-zoom-target {
+  transform: scale(1.04);
+}
+
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0 1px;
+  transition: background-size 0.25s ease;
+}
+
+.link-underline:hover {
+  background-size: 100% 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .marquee-track,
+  .img-zoom img,
+  .img-zoom-target,
+  .link-underline {
+    animation: none !important;
+    transition: none !important;
+  }
+}
