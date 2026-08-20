@@ -21,7 +21,6 @@ export function BlogListingTemplate({
     if (!cat) return list;
     return list.filter((p) => p.category.toUpperCase() === cat);
   }, [cat]);
-  const [featured, ...rest] = visible;
 
   return (
     <PageShell>
@@ -41,37 +40,9 @@ export function BlogListingTemplate({
               </button>
             ))}
           </div>
-          {featured ? (
-            <div className="mt-10 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-              <BlogCard
-                href={featured.path}
-                image={featured.image}
-                title={featured.title}
-                heading={featured.heading}
-                category={featured.category}
-                date={featured.date}
-                author={featured.author}
-                featured
-              />
-              <div className="flex flex-col gap-4">
-                {rest.slice(0, 2).map((post) => (
-                  <BlogCard
-                    key={post.slug}
-                    href={post.path}
-                    image={post.image}
-                    title={post.title}
-                    heading={post.heading}
-                    category={post.category}
-                    date={post.date}
-                    author={post.author}
-                  />
-                ))}
-              </div>
-            </div>
-          ) : null}
-          {rest.length > 2 ? (
-            <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {rest.slice(2).map((post) => (
+          {visible.length ? (
+            <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {visible.map((post) => (
                 <BlogCard
                   key={post.slug}
                   href={post.path}

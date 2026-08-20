@@ -1,7 +1,6 @@
 "use client";
 
 import { site } from "@/content/site";
-import { cn } from "@/lib/cn";
 import { SlidersHorizontal, X } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -41,46 +40,54 @@ export function DirectoryFilters({
   if (q) active.unshift({ key: "q", value: q, all: searchPlaceholder });
 
   const panel = (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <input
         value={q}
         onChange={(e) => write({ q: e.target.value || null })}
         placeholder={searchPlaceholder}
         aria-label={searchPlaceholder}
-        className="min-h-12 w-full rounded-2xl border border-line bg-mist px-5 text-sm outline-none transition focus:border-lime focus:bg-white"
+        className="min-h-11 w-full rounded-lg border border-line bg-white px-3 text-sm outline-none transition focus:border-lime"
       />
-      {groups.map((group) => (
-        <div key={group.key}>
-          <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-teal">{group.all}</p>
-          <div className="flex flex-wrap gap-2">
-            <Chip
-              active={!params.get(group.key)}
-              onClick={() => write({ [group.key]: null })}
-              label={group.all}
-            />
-            {group.options.map((opt) => (
-              <Chip
-                key={opt}
-                active={params.get(group.key) === opt}
-                onClick={() => write({ [group.key]: opt })}
-                label={opt}
+      {groups.map((group) => {
+        const selected = params.get(group.key);
+        return (
+          <fieldset key={group.key}>
+            <legend className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-teal">{group.all}</legend>
+            <label className="flex min-h-10 cursor-pointer items-center gap-3 text-sm text-forest">
+              <input
+                type="checkbox"
+                checked={!selected}
+                onChange={() => write({ [group.key]: null })}
+                className="h-4 w-4 accent-forest"
               />
+              {group.all}
+            </label>
+            {group.options.map((opt) => (
+              <label key={opt} className="flex min-h-10 cursor-pointer items-center gap-3 text-sm text-forest">
+                <input
+                  type="checkbox"
+                  checked={selected === opt}
+                  onChange={() => write({ [group.key]: selected === opt ? null : opt })}
+                  className="h-4 w-4 accent-forest"
+                />
+                {opt}
+              </label>
             ))}
-          </div>
-        </div>
-      ))}
+          </fieldset>
+        );
+      })}
     </div>
   );
 
   return (
     <div>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 lg:hidden">
         <p className="text-sm tabular-nums text-muted" aria-live="polite">
           {resultCount}
         </p>
         <button
           type="button"
-          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 text-sm font-semibold text-forest md:hidden"
+          className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 text-sm font-semibold text-forest"
           onClick={() => setOpen(true)}
         >
           <SlidersHorizontal className="h-4 w-4" aria-hidden />
@@ -88,7 +95,7 @@ export function DirectoryFilters({
         </button>
       </div>
       {active.length ? (
-        <div className="mb-5 flex flex-wrap items-center gap-2">
+        <div className="mb-5 flex flex-wrap items-center gap-2 lg:hidden">
           {active.map((a) => (
             <button
               key={a.key + a.value}
@@ -105,9 +112,21 @@ export function DirectoryFilters({
           </button>
         </div>
       ) : null}
-      <div className="hidden rounded-2xl bg-white p-6 shadow-soft md:block">{panel}</div>
+      <aside className="hidden rounded-2xl border border-line bg-white p-5 lg:block">
+        <div className="mb-4 flex items-center justify-between">
+          <p className="text-sm tabular-nums text-muted" aria-live="polite">
+            {resultCount}
+          </p>
+          {active.length ? (
+            <button type="button" className="text-sm font-semibold text-teal" onClick={() => router.replace(pathname, { scroll: false })}>
+              {clearLabel}
+            </button>
+          ) : null}
+        </div>
+        {panel}
+      </aside>
       {open ? (
-        <div className="fixed inset-0 z-50 bg-forest/40 md:hidden" onClick={() => setOpen(false)}>
+        <div className="fixed inset-0 z-50 bg-forest/40 lg:hidden" onClick={() => setOpen(false)}>
           <div
             className="absolute inset-x-0 bottom-0 max-h-[85vh] overflow-auto rounded-t-3xl bg-white p-5 pb-8"
             onClick={(e) => e.stopPropagation()}
@@ -123,21 +142,5 @@ export function DirectoryFilters({
         </div>
       ) : null}
     </div>
-  );
-}
-
-function Chip({ active, onClick, label }: { active: boolean; onClick: () => void; label: string }) {
-  return (
-    <button
-      type="button"
-      aria-pressed={active}
-      onClick={onClick}
-      className={cn(
-        "inline-flex min-h-11 cursor-pointer items-center rounded-full border px-4 text-sm transition duration-200",
-        active ? "border-forest bg-forest text-white" : "border-line bg-white text-forest hover:border-lime",
-      )}
-    >
-      {label}
-    </button>
   );
 }

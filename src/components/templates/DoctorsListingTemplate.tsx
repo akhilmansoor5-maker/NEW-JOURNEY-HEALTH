@@ -30,7 +30,7 @@ export function DoctorsListingTemplate() {
           <h1 className="text-[clamp(2rem,5vw,3.4rem)] font-semibold tracking-[-0.03em] text-forest">
             {doctorsListingHeading}
           </h1>
-          <div className="mt-8">
+          <div className="mt-8 grid items-start gap-8 lg:grid-cols-[280px_1fr]">
             <DirectoryFilters
               resultCount={items.length}
               clearLabel={clearLabel}
@@ -40,9 +40,9 @@ export function DoctorsListingTemplate() {
                 { key: "location", all: allLocations, options: values.locations },
               ]}
             />
-            <div className="mt-8">
+            <div>
               {items.length ? (
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
                   {items.map((d) => (
                     <DoctorCard
                       key={d.id}

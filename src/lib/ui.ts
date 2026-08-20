@@ -22,7 +22,6 @@ export const darkHeroPaths = new Set([
   "/orthopaedic-surgeries-detail-page/",
   "/hospital-detail-page-template/",
   "/about-us/",
-  "/contact-us/",
   "/ayurveda/",
   "/dentistry/",
   "/blog-dummy-post/",

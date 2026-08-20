@@ -1,69 +1,63 @@
 "use client";
 
 import { home } from "@/content/home";
-import { cn } from "@/lib/cn";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef } from "react";
 import { Container } from "../ui/Container";
-import { PhraseTitle } from "../ui/PhraseTitle";
 
 export function TreatmentExplorer() {
-  const [index, setIndex] = useState(1);
-  const reduce = useReducedMotion();
-  const cards = home.treatmentCards;
-  const active = cards[index];
+  const ref = useRef<HTMLDivElement>(null);
 
   return (
     <section id="treatments" className="bg-white py-14 lg:py-20">
       <Container>
-        <PhraseTitle text={home.treatmentsHeading} mark="treatments we offer" className="max-w-2xl" />
-        <div className="mt-10 grid items-stretch gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:gap-12">
-          <div className="relative min-h-[320px] overflow-hidden rounded-2xl sm:min-h-[420px] lg:min-h-[520px]">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={active.title}
-                className="absolute inset-0"
-                initial={reduce ? false : { opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={reduce ? undefined : { opacity: 0 }}
-                transition={{ duration: 0.25 }}
-              >
-                <Image src={active.image} alt={active.alt} fill className="object-cover" sizes="(min-width: 1024px) 55vw, 100vw" />
-                <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/80 via-transparent to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">
-                  <p className="text-sm text-white/75">{active.subtitle}</p>
-                  <h3 className="mt-2 text-3xl font-semibold">{active.title}</h3>
-                  <Link href={active.href} className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-lime">
-                    {home.learnMore}
-                  </Link>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-          <div className="flex flex-col justify-center divide-y divide-line">
-            {cards.map((card, i) => (
-              <button
-                key={card.title}
-                type="button"
-                aria-pressed={i === index}
-                onMouseEnter={() => setIndex(i)}
-                onFocus={() => setIndex(i)}
-                onClick={() => setIndex(i)}
-                className={cn(
-                  "flex min-h-14 items-center justify-between gap-4 py-4 text-left transition duration-200",
-                  i === index ? "text-forest" : "text-muted hover:text-forest",
-                )}
-              >
-                <span>
-                  <span className="block text-lg font-semibold">{card.title}</span>
-                  <span className="mt-0.5 block text-sm">{card.subtitle}</span>
-                </span>
-                <span className={cn("h-px w-8 shrink-0 transition duration-200", i === index ? "bg-lime" : "bg-line")} />
-              </button>
-            ))}
-          </div>
+        <h2 className="mx-auto max-w-3xl text-center text-[clamp(1.7rem,3.4vw,2.75rem)] font-semibold leading-[1.15] tracking-[-0.03em] text-forest">
+          {home.treatmentsHeading}
+        </h2>
+        <div className="mt-8 hidden justify-end gap-2 lg:flex">
+          <button
+            type="button"
+            aria-label="Previous"
+            onClick={() => ref.current?.scrollBy({ left: -320, behavior: "smooth" })}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-line text-forest hover:bg-mist"
+          >
+            <ChevronLeft />
+          </button>
+          <button
+            type="button"
+            aria-label="Next"
+            onClick={() => ref.current?.scrollBy({ left: 320, behavior: "smooth" })}
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-line text-forest hover:bg-mist"
+          >
+            <ChevronRight />
+          </button>
+        </div>
+        <div
+          ref={ref}
+          className="mt-6 flex gap-4 overflow-x-auto pb-2 lg:grid lg:grid-cols-5 lg:overflow-visible lg:pb-0"
+        >
+          {home.treatmentCards.map((card) => (
+            <Link
+              key={card.title}
+              href={card.href}
+              className="group relative h-[380px] w-[min(78vw,280px)] shrink-0 overflow-hidden rounded-2xl lg:h-[420px] lg:w-auto"
+            >
+              <Image
+                src={card.image}
+                alt={card.alt}
+                fill
+                className="object-cover transition duration-300 group-hover:scale-[1.04]"
+                sizes="(min-width: 1024px) 18vw, 78vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-forest-deep via-forest/25 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+                <h3 className="text-xl font-semibold text-lime">{card.title}</h3>
+                <p className="mt-1 text-sm text-white/85">{card.subtitle}</p>
+              </div>
+            </Link>
+          ))}
         </div>
       </Container>
     </section>

@@ -149,24 +149,8 @@ export function Header() {
                       className="fixed inset-x-0 top-[3.55rem] z-50 px-5 pt-4 lg:px-8"
                       id="treatments-menu"
                     >
-                      <div className="mx-auto grid max-w-[1280px] overflow-hidden rounded-2xl border border-line bg-white shadow-media lg:grid-cols-[280px_220px_1fr]">
-                        <div className="relative hidden min-h-[380px] lg:block">
-                          <Image
-                            src={megaImages[col.title] ?? media.modernMedicine}
-                            alt=""
-                            fill
-                            className="object-cover transition duration-200"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/80 to-forest/10" />
-                          <div className="absolute inset-x-0 bottom-0 p-6 text-white">
-                            <p className="text-[11px] uppercase tracking-[0.16em] text-lime">Treatments</p>
-                            <p className="mt-2 text-2xl font-semibold">{col.title}</p>
-                            {megaBlurbs[col.title] ? (
-                              <p className="mt-2 text-sm text-white/75">{megaBlurbs[col.title]}</p>
-                            ) : null}
-                          </div>
-                        </div>
-                        <div className="border-r border-line p-4">
+                      <div className="mx-auto grid max-w-[1280px] overflow-hidden rounded-2xl border border-line bg-white shadow-media lg:grid-cols-[240px_1fr]">
+                        <div className="border-r border-line bg-mist p-3">
                           {megaMenu
                             .filter((c) => !c.launchingSoon)
                             .map((c) => (
@@ -176,16 +160,14 @@ export function Header() {
                                 onMouseEnter={() => setActiveCol(c.title)}
                                 onFocus={() => setActiveCol(c.title)}
                                 className={cn(
-                                  "flex min-h-12 w-full cursor-pointer items-center border-l-2 px-4 text-left text-[15px] font-semibold transition duration-200",
-                                  c.title === col.title
-                                    ? "border-lime text-forest"
-                                    : "border-transparent text-muted hover:text-forest",
+                                  "flex min-h-12 w-full cursor-pointer items-center rounded-xl px-4 text-left text-[15px] font-semibold transition duration-200",
+                                  c.title === col.title ? "bg-white text-forest shadow-soft" : "text-muted hover:text-forest",
                                 )}
                               >
                                 {c.title}
                               </button>
                             ))}
-                          <div className="my-3 mx-4 border-t border-line" />
+                          <div className="my-3 mx-3 border-t border-line" />
                           {megaMenu
                             .filter((c) => c.launchingSoon)
                             .map((c) => (
@@ -195,8 +177,8 @@ export function Header() {
                                 onMouseEnter={() => setActiveCol(c.title)}
                                 onFocus={() => setActiveCol(c.title)}
                                 className={cn(
-                                  "flex min-h-12 w-full cursor-pointer items-center justify-between gap-2 px-4 text-left text-sm transition duration-200",
-                                  c.title === col.title ? "text-forest" : "text-muted hover:text-forest",
+                                  "flex min-h-12 w-full cursor-pointer items-center justify-between gap-2 rounded-xl px-4 text-left text-sm transition duration-200",
+                                  c.title === col.title ? "bg-white text-forest shadow-soft" : "text-muted hover:text-forest",
                                 )}
                               >
                                 <span>{c.title}</span>
@@ -206,31 +188,51 @@ export function Header() {
                               </button>
                             ))}
                         </div>
-                        <div className="p-6 lg:p-8">
-                          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-teal">{col.title}</p>
-                          <ul className="mt-5 grid gap-1 sm:grid-cols-2">
-                            {col.children.map((child) => (
-                              <li key={child.label}>
-                                {child.href ? (
-                                  <Link
-                                    href={child.href}
-                                    className="flex min-h-11 items-center text-[15px] text-forest transition duration-200 hover:text-teal"
-                                  >
-                                    {child.label}
-                                  </Link>
-                                ) : (
-                                  <span className="flex min-h-11 items-center text-[15px] text-muted/70">{child.label}</span>
-                                )}
-                              </li>
-                            ))}
-                          </ul>
-                          {col.href ? (
-                            <Link href={col.href} className="mt-8 inline-flex min-h-11 items-center text-sm font-semibold text-teal">
-                              {home.learnMore}
-                            </Link>
-                          ) : (
-                            <p className="mt-8 text-[11px] uppercase tracking-[0.14em] text-teal">Launching Soon</p>
-                          )}
+                        <div className="grid min-h-[360px] lg:grid-cols-[0.9fr_1.1fr]">
+                          <div className="relative hidden min-h-[360px] lg:block">
+                            <Image
+                              src={megaImages[col.title] ?? media.modernMedicine}
+                              alt=""
+                              fill
+                              className="object-cover transition duration-200"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-forest-deep/80 to-forest/10" />
+                            <div className="absolute inset-x-0 bottom-0 p-6 text-white">
+                              <p className="text-[11px] uppercase tracking-[0.16em] text-lime">Treatments</p>
+                              <p className="mt-2 text-2xl font-semibold">{col.title}</p>
+                              {megaBlurbs[col.title] ? (
+                                <p className="mt-2 text-sm text-white/75">{megaBlurbs[col.title]}</p>
+                              ) : null}
+                            </div>
+                          </div>
+                          <div className="flex flex-col p-5 lg:p-6">
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-teal">{col.title}</p>
+                            <ul className="mt-4 grid flex-1 content-start gap-2 sm:grid-cols-2">
+                              {col.children.map((child) => (
+                                <li key={child.label}>
+                                  {child.href ? (
+                                    <Link
+                                      href={child.href}
+                                      className="flex min-h-12 items-center rounded-xl bg-mist px-4 text-[15px] text-forest transition duration-200 hover:bg-sage"
+                                    >
+                                      {child.label}
+                                    </Link>
+                                  ) : (
+                                    <span className="flex min-h-12 items-center rounded-xl bg-mist px-4 text-[15px] text-muted/70">
+                                      {child.label}
+                                    </span>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                            {col.href ? (
+                              <Link href={col.href} className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-teal">
+                                {home.learnMore}
+                              </Link>
+                            ) : (
+                              <p className="mt-4 text-[11px] uppercase tracking-[0.14em] text-teal">Launching Soon</p>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </motion.div>

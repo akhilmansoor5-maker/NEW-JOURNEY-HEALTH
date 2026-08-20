@@ -24,7 +24,6 @@ import { SectionHeading } from "../ui/SectionHeading";
 import { Hero } from "./Hero";
 import { TreatmentExplorer } from "./TreatmentExplorer";
 import { PatientJourney } from "./PatientJourney";
-import { CostComparison } from "./CostComparison";
 import { TestimonialsCarousel } from "./TestimonialsCarousel";
 import { DoctorCard } from "../cards/DoctorCard";
 import { BlogCard } from "../cards/BlogCard";
@@ -33,13 +32,9 @@ const conciergeIcons = [Hospital, CalendarCheck, Languages, ClipboardList, Plane
 const comfortPhotos = [media.wellness, media.journey[4], media.journey[6], media.ayurveda];
 
 export function HomePage() {
-  const [featuredDoctor, ...otherDoctors] = featuredDoctors.slice(0, 5);
+  const doctors = featuredDoctors.slice(0, 5);
   const [featuredHospital, ...otherHospitals] = listingHospitals.slice(0, 3);
   const stories = featuredPosts.filter((p) => !("unreachableAsPost" in p && p.unreachableAsPost)).slice(0, 3);
-  const [featuredStory, ...otherStories] = stories;
-  const featuredConcierge = home.concierge.slice(0, 2);
-  const compactConcierge = home.concierge.slice(2);
-  const conciergePhotos = [media.heroPortrait, media.wellness];
 
   return (
     <>
@@ -49,31 +44,9 @@ export function HomePage() {
       <section className="bg-forest py-14 text-white lg:py-20">
         <Container>
           <SectionHeading title={home.conciergeHeading} light className="max-w-xl" />
-          <div className="mt-10 grid gap-4 lg:grid-cols-2">
-            {featuredConcierge.map((item, i) => {
+          <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {home.concierge.map((item, i) => {
               const Icon = conciergeIcons[i];
-              return (
-                <article key={item.title} className="group relative min-h-[280px] overflow-hidden rounded-2xl transition duration-200 hover:-translate-y-0.5">
-                  <Image
-                    src={conciergePhotos[i]}
-                    alt=""
-                    fill
-                    className="object-cover transition duration-300 group-hover:scale-105"
-                    sizes="(min-width: 1024px) 50vw, 100vw"
-                  />
-                  <div className="absolute inset-0 bg-forest-deep/65 transition duration-200 group-hover:bg-forest-deep/55" />
-                  <div className="absolute inset-0 flex flex-col justify-end p-6">
-                    <Icon className="h-6 w-6 text-lime transition duration-200 group-hover:-translate-y-0.5" aria-hidden />
-                    <h3 className="mt-4 text-xl font-semibold">{item.title}</h3>
-                    <p className="mt-2 max-w-md text-sm leading-relaxed text-white/75">{item.body}</p>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {compactConcierge.map((item, i) => {
-              const Icon = conciergeIcons[i + 2];
               return (
                 <article
                   key={item.title}
@@ -91,22 +64,18 @@ export function HomePage() {
           </div>
         </Container>
       </section>
-      <CostComparison />
       <section className="bg-sage py-14 lg:py-20">
-        <Container className="grid items-start gap-10 lg:grid-cols-[0.85fr_1.15fr]">
-          <SectionHeading title={home.comfortHeading} className="max-w-sm" />
-          <div className="grid gap-3 sm:grid-cols-2">
+        <Container>
+          <SectionHeading title={home.comfortHeading} className="mx-auto max-w-2xl text-center" />
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {home.comfort.map((item, i) => (
-              <article
-                key={item}
-                className={`group relative overflow-hidden rounded-2xl ${i === 0 ? "min-h-[240px] sm:row-span-2 sm:min-h-full" : "min-h-[160px]"}`}
-              >
+              <article key={item} className="group relative min-h-[240px] overflow-hidden rounded-2xl">
                 <Image
                   src={comfortPhotos[i]}
                   alt=""
                   fill
                   className="object-cover transition duration-300 group-hover:scale-[1.04]"
-                  sizes="(min-width: 1024px) 28vw, 50vw"
+                  sizes="(min-width: 1024px) 22vw, 50vw"
                 />
                 <div className="absolute inset-0 bg-forest-deep/55 transition duration-200 group-hover:bg-forest-deep/45" />
                 <div className="absolute inset-0 flex flex-col justify-end p-5">
@@ -126,13 +95,10 @@ export function HomePage() {
               {home.learnMore}
             </Link>
           </div>
-          <div className="mt-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-            <DoctorCard {...featuredDoctor} large />
-            <div className="grid gap-5 sm:grid-cols-2">
-              {otherDoctors.map((d) => (
-                <DoctorCard key={d.name} {...d} />
-              ))}
-            </div>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+            {doctors.map((d) => (
+              <DoctorCard key={d.name} {...d} />
+            ))}
           </div>
         </Container>
       </section>
@@ -177,25 +143,27 @@ export function HomePage() {
           </div>
         </Container>
       </section>
-      <section className="border-y border-line bg-white py-10">
-        <Container className="grid items-center gap-8 lg:grid-cols-[200px_1fr]">
+      <section className="overflow-hidden border-y border-line bg-white py-8">
+        <Container className="mb-5">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-teal">{home.featuredHeading}</p>
-          <div className="flex flex-wrap items-center gap-x-10 gap-y-5">
-            {media.press.map((src) => (
+        </Container>
+        <div className="flex overflow-hidden">
+          <div className="marquee-track flex min-w-max items-center gap-16 pr-16">
+            {[...media.press, ...media.press].map((src, i) => (
               <Image
-                key={src}
+                key={`${src}-${i}`}
                 src={src}
                 alt=""
-                width={140}
-                height={56}
-                className="h-8 w-auto object-cover opacity-40 grayscale transition duration-200 hover:opacity-80 hover:grayscale-0"
+                width={160}
+                height={64}
+                className="h-10 w-auto object-cover opacity-45 grayscale"
               />
             ))}
           </div>
-        </Container>
+        </div>
       </section>
       <TestimonialsCarousel heading={home.testimonialsHeading} items={home.homeTestimonials} sage />
-      {featuredStory ? (
+      {stories.length ? (
         <section className="bg-white py-14 lg:py-20">
           <Container>
             <div className="flex flex-wrap items-end justify-between gap-4">
@@ -204,31 +172,19 @@ export function HomePage() {
                 {home.learnMore}
               </Link>
             </div>
-            <div className="mt-10 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-              <BlogCard
-                href={featuredStory.path}
-                image={featuredStory.image}
-                title={featuredStory.title}
-                heading={featuredStory.heading}
-                category={featuredStory.category}
-                date={featuredStory.date}
-                author={featuredStory.author}
-                featured
-              />
-              <div className="flex flex-col gap-4">
-                {otherStories.map((p) => (
-                  <BlogCard
-                    key={p.slug}
-                    href={p.path}
-                    image={p.image}
-                    title={p.title}
-                    heading={p.heading}
-                    category={p.category}
-                    date={p.date}
-                    author={p.author}
-                  />
-                ))}
-              </div>
+            <div className="mt-10 grid gap-6 md:grid-cols-3">
+              {stories.map((p) => (
+                <BlogCard
+                  key={p.slug}
+                  href={p.path}
+                  image={p.image}
+                  title={p.title}
+                  heading={p.heading}
+                  category={p.category}
+                  date={p.date}
+                  author={p.author}
+                />
+              ))}
             </div>
           </Container>
         </section>
